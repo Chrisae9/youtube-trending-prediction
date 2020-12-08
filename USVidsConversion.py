@@ -19,6 +19,6 @@ for i in range(row_count):
         result = np.array([0], dtype = np.int)
     label_arr = np.append(label_arr, result)
 
-#np.savetxt('output.txt', label_arr, '%d', delimiter = ',')   
+np.savetxt('output.txt', label_arr, '%d', delimiter = ',')   
 modified_df = df
 modified_df['label'] = label_arr
