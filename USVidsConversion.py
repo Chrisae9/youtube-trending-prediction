@@ -6,7 +6,7 @@ def csv_conversion(file_name):
     publish = df['publish_time']
     trending = df['trending_date']
     views = df['views']
-    row_count, col_count = df.shape
+    row_count = df.shape[0]
     a_million = 1000000
     label_arr = np.array([], dtype = np.int)
 
