@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 def csv_conversion(file_name):
-    df = pd.read_csv(file_name)
+    df = pd.read_csv(file_name, encoding = "ISO-8859-1")
     publish = df['publish_time']
     trending = df['trending_date']
     views = df['views']
