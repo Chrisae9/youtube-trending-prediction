@@ -4,3 +4,9 @@ pytesseract
 requests
 pillow
 pandarallel
+spacy
+nltk
+autocorrect
+unidecode
+scipy
+sklearn
