@@ -14,6 +14,8 @@ import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.corpus import stopwords
 from sklearn.model_selection import train_test_split
+import random
+from sklearn.metrics.pairwise import cosine_similarity, euclidean_distances, manhattan_distances
 
 
 
@@ -162,7 +164,8 @@ def preprocessor(review):
 df = pd.read_csv("data/test.csv", encoding = "ISO-8859-1")
 
 data = df.drop(columns=['label'])
-sentiment = df['label']
+sentiment = df['label'].fillna(0)
+
 
 
 x_train, x_test, y_train, y_test = train_test_split(data, sentiment, random_state = 42, test_size = 0.2, shuffle = True)
@@ -170,9 +173,35 @@ x_train, x_test, y_train, y_test = train_test_split(data, sentiment, random_stat
 tfidf = TfidfVectorizer(stop_words=stopwords.words('english'))
 
 
-train_vector = tfidf.fit_transform(x_train.tokenized_title)
-test_vector = tfidf.transform(x_test.tokenized_title)
+train_vector = tfidf.fit_transform(x_train.tokenized_title.astype('U').values)
+test_vector = tfidf.transform(x_test.tokenized_title.astype('U').values)
 
+
+def tiebreaker(distances, sentiments):
+    count = sum(map(lambda s: sentiments[s], distances))
+    if count == 0:
+        count = random.randint(-1, 1)
+    return 1 if count >= 1 else -1
+
+
+def kNearestNeighbours(test_vector, train_vector, sentiments, k):
+    # dist = cosine_similarity(test_vector, train_vector)
+    dist = euclidean_distances(test_vector, train_vector)
+    # dist = manhattan_distances(test_vector, train_vector)
+    results = []
+    for x in dist:
+        results.append(tiebreaker(x.argsort()[-k:], sentiments))
+    return results
+
+
+pred = kNearestNeighbours(test_vector, train_vector, y_train.tolist(), 3)
+
+count = 0
+for i, p in enumerate(pred):
+    if y_test.tolist()[i] == p:
+        count+= 1
+
+print(count/len(pred))
 
 exit(0)
 
