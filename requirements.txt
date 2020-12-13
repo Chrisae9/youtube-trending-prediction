@@ -10,3 +10,5 @@ autocorrect
 unidecode
 scipy
 sklearn
+textblob
+pyqt5-tools
