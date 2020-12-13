@@ -16,7 +16,7 @@ from nltk.corpus import stopwords
 from sklearn.model_selection import train_test_split
 import random
 from sklearn.metrics.pairwise import cosine_similarity, euclidean_distances, manhattan_distances
-
+from textblob import TextBlob
 
 
 from pandarallel import pandarallel
@@ -24,7 +24,6 @@ from pandarallel import pandarallel
 os.system("python -m spacy download en")
 nltk.download('stopwords')
 pandarallel.initialize()
-
 
 def getLabel(publish, trending, views):
 
@@ -44,9 +43,27 @@ def getLabel(publish, trending, views):
         return 1
     return 0
 
-
 def csv_conversion(file_name):
     df = pd.read_csv(file_name, encoding="ISO-8859-1")
+    df['title_sentiment'] = df.apply(lambda x: TextBlob(x['title']).sentiment.polarity, axis = 1)
+    df['tags_sentiment'] = df.apply(lambda x: TextBlob(x['tags']).sentiment.polarity, axis = 1)
+    df['descrip_sentiment'] = df.apply(lambda x: TextBlob(str(x['description'])).sentiment.polarity, axis = 1)
+    
+    # Classifying titles into positive, neutral and negative
+    df.loc[df['title_sentiment'] < 0, 'title_sent_class'] = -1
+    df.loc[df['title_sentiment'] == 0, 'title_sent_class'] = 0
+    df.loc[df['title_sentiment'] > 0, 'title_sent_class'] = 1
+    
+    # Classifying tags into positive, neutral and negative
+    df.loc[df['tags_sentiment'] < 0, 'tags_sent_class'] = -1
+    df.loc[df['tags_sentiment'] == 0, 'tags_sent_class'] = 0
+    df.loc[df['tags_sentiment'] > 0, 'tags_sent_class'] = 1
+    
+    # Classifying descriptions into positive, neutral and negative
+    df.loc[df['descrip_sentiment'] < 0, 'descrip_sent_class'] = -1
+    df.loc[df['descrip_sentiment'] == 0, 'descrip_sent_class'] = 0
+    df.loc[df['descrip_sentiment'] > 0, 'descrip_sent_class'] = 1
+
     df['label'] = df.parallel_apply(lambda x: getLabel(
         x['publish_time'], x['trending_date'], x['views']), axis=1)
 
@@ -203,7 +220,7 @@ for i, p in enumerate(pred):
 
 print(count/len(pred))
 
-exit(0)
+#exit(0)
 
 
 df_US = csv_conversion("data/USvideos.csv")
