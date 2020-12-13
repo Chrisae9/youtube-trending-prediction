@@ -71,7 +71,7 @@ def averageClickbaitScore(dataframe):
     return result
     
 df_US = csv_conversion("data/USvideos.csv")
-#print(df_US)
+print(df_US)
 #print(averageClickbaitScore(df_US))
 #df_RU = csv_conversion("data/RUvideos.csv")
 #df_MX = csv_conversion("data/MXvideos.csv")
