@@ -12,3 +12,4 @@ scipy
 sklearn
 textblob
 pyqt5-tools
+matplotlib

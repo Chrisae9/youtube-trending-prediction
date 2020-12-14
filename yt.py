@@ -4,8 +4,7 @@ import sys
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtWidgets import QApplication, QLineEdit, QMessageBox, QShortcut
-import time
-
+from utils import compute
 
 def get_ui_file_for(ui_filename):
     """
@@ -34,7 +33,6 @@ class YTApp(UI_MainWindow, QtWidgets.QMainWindow):
         self.quit_button.clicked.connect(self.quit)
         self.quit_button.shortcut = QShortcut(QKeySequence('CTRL+Q'), self)
         self.quit_button.shortcut.activated.connect(self.quit)
-
 
         self.update_status()
 
@@ -71,16 +69,23 @@ class YTApp(UI_MainWindow, QtWidgets.QMainWindow):
             "Trailers": 44
         }
 
+        self.tod = {
+            'Night': 0,
+            'Morning': 1,
+            'Afternoon': 2,
+            'Evening': 3
+        }
 
         for x in list(self.categories.keys()):
             self.cate_combo.addItem(x)
 
+        for x in list(self.tod.keys()):
+            self.time_combo.addItem(x)
 
     def get_data(self):
         """gets the data"""
-        data = self.title_input.text(), self.descr_box.toPlainText(
-        ), self.tags_input.toPlainText().split(','), self.categories[self.cate_combo.currentText()]
-        return data
+        return compute(self.title_input.text(), self.descr_box.toPlainText(), self.tags_input.toPlainText().split(
+            ','), self.tod[self.time_combo.currentText()], self.categories[self.cate_combo.currentText()])
 
     def data_empty(self):
         """Returns true if the data is empty"""
@@ -101,18 +106,19 @@ class YTApp(UI_MainWindow, QtWidgets.QMainWindow):
             self.descr_box.setEnabled(True)
             self.tags_input.setEnabled(True)
             self.cate_combo.setEnabled(True)
-
+            self.time_combo.setEnabled(True)
 
         else:
             self.title_input.setEnabled(False)
             self.descr_box.setEnabled(False)
             self.tags_input.setEnabled(False)
             self.cate_combo.setEnabled(False)
-
+            self.time_combo.setEnabled(False)
 
     def run(self):
         """runs the script"""
         value = 0
+        print("here")
 
         if self.data_empty():
             self.update_status('Please enter values')
@@ -121,11 +127,10 @@ class YTApp(UI_MainWindow, QtWidgets.QMainWindow):
             self.toggle_data(False)
             self.update_status('Processing')
 
-
-            #PUT PROCESSING HERE
+            # PUT PROCESSING HERE
 
             answer = self.get_data()
-            if(len(answer[2]) > 2):
+            if(answer == 1):
                 answer = '<html><head/><body><p align="center"> There is a high chance <br/>your video will go trending within 24 hours.</p></body></html>'
             else:
                 answer = '<html><head/><body><p align="center"> There is a low chance <br/>your video will go trending within 24 hours.</p></body></html>'
@@ -137,7 +142,6 @@ class YTApp(UI_MainWindow, QtWidgets.QMainWindow):
 
     def update_status(self, text='Ready'):
         """Updates the status bar text at the bottom of the app"""
-        print("here")
         self.statusBar().showMessage(text)
 
     def quit(self):

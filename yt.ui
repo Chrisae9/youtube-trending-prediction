@@ -70,6 +70,16 @@
      <widget class="QPlainTextEdit" name="tags_input"/>
     </item>
     <item>
+     <widget class="QLabel" name="tod_label">
+      <property name="text">
+       <string>Time of Day</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="time_combo"/>
+    </item>
+    <item>
      <widget class="QLabel" name="cate_label">
       <property name="text">
        <string>Category</string>
