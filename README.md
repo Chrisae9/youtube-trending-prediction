@@ -14,9 +14,6 @@ million views or more within twenty-four hours, and those that do not. The categ
 were selected as features for the algorithm. Multiple machine learning algorithms were used to predict determine which gave the
 best performance. In doing so, Random Forest and the Decision Tree classifiers ended up giving the best results.
 
-## Video
-
-https://www.youtube.com/watch?v=2rJ86XD_bCw&feature=youtu.be
 
 ## Setup
 
@@ -29,3 +26,13 @@ Install Dependencies.
 Launch the GUI.
 
 `python yt.py`
+
+## Resources
+
+### Data
+
+https://www.kaggle.com/datasnaek/youtube-new
+
+### Video
+
+https://www.youtube.com/watch?v=2rJ86XD_bCw&feature=youtu.be
