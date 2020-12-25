@@ -1,4 +1,10 @@
-# youtube-trending-prediction
+# Is it Possible to Tell if a YouTube Video Will Go “Super Trending”?
+
+## Definition
+
+“Super Trending” - A Trending YouTube Video that obtains over a million views within a 24-hour time period.
+
+## Description
 
 Given recent times with the ongoing pandemic, content creators on YouTube may notice a gain of a larger audience as people look
 for things to do within their free time. To take advantage of this, analyzing what exactly makes a video trend is important to
